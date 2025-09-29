@@ -1,0 +1,1827 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>EverLearners - Subjects</title>
+<link rel="stylesheet" href="styles.css">
+<style>
+/* Enhanced Game Styles */
+:root{--accent:#2a8c3f;--bg:#f0fff4;--panel:#fff}
+.topbar{padding:10px 16px;background:#d6f5d6;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;}
+.topbar h1{margin:0;font-size:18px;color:var(--accent);}
+.topbar #backToConcept{background:#ff9800;color:#fff;border:none;border-radius:6px;padding:5px 10px;cursor:pointer;}
+.equation{font-size:14px;font-weight:bold;color:#2a8c3f;}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;height:calc(100vh - 60px);padding:10px;}
+.game{background:var(--panel);border-radius:10px;display:flex;flex-direction:column;align-items:center;justify-content:center;position:relative;}
+canvas{border:2px solid #cce;border-radius:10px;background:linear-gradient(#c2f0c2,#eaffea);}
+.hud{margin-top:8px;display:flex;gap:8px;font-size:14px;flex-wrap:wrap;}
+.controls{margin-top:6px;}
+.controls button{margin:0 4px;padding:6px 10px;border:none;border-radius:6px;background:var(--accent);color:white;cursor:pointer;}
+.sidebar{overflow-y:auto;}
+.quiz,.badges{background:var(--panel);padding:10px;margin-bottom:10px;border-radius:10px;}
+.quiz h2,.badges h2{margin-top:0;}
+.options button{display:inline-block;margin:4px;padding:6px 10px;border-radius:6px;border:1px solid #ccc;background:#f9f9f9;cursor:pointer;}
+.feedback{min-height:18px;font-size:13px;}
+.options button.correct{background:#a8f0a5;}
+.options button.wrong{background:#f6a5a5;}
+#finalBadge{padding:12px;text-align:center;font-size:16px;font-weight:bold;border:2px dashed #ccc;border-radius:8px;}
+.footer{text-align:center;padding:6px;font-size:12px;color:#555;background:#eaeaea;}
+.panel-center{display:flex;flex-direction:column;align-items:center;justify-content:center;height:100vh;text-align:center;background:var(--bg);padding:20px;}
+.panel-center button{margin-top:20px;padding:10px 20px;border:none;border-radius:8px;background:var(--accent);color:white;font-size:16px;cursor:pointer;}
+</style>
+<style>
+/* Enhanced Game Styles */
+:root{--accent:#2a8c3f;--bg:#f0fff4;--panel:#fff}
+.topbar{padding:10px 16px;background:#d6f5d6;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;}
+.topbar h1{margin:0;font-size:18px;color:var(--accent);}
+.topbar #backToConcept{background:#ff9800;color:#fff;border:none;border-radius:6px;padding:5px 10px;cursor:pointer;}
+.equation{font-size:14px;font-weight:bold;color:#2a8c3f;}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;height:calc(100vh - 60px);padding:10px;}
+.game{background:var(--panel);border-radius:10px;display:flex;flex-direction:column;align-items:center;justify-content:center;position:relative;}
+canvas{border:2px solid #cce;border-radius:10px;background:linear-gradient(#c2f0c2,#eaffea);}
+.hud{margin-top:8px;display:flex;gap:8px;font-size:14px;flex-wrap:wrap;}
+.controls{margin-top:6px;}
+.controls button{margin:0 4px;padding:6px 10px;border:none;border-radius:6px;background:var(--accent);color:white;cursor:pointer;}
+.sidebar{overflow-y:auto;}
+.quiz,.badges{background:var(--panel);padding:10px;margin-bottom:10px;border-radius:10px;}
+.quiz h2,.badges h2{margin-top:0;}
+.options button{display:inline-block;margin:4px;padding:6px 10px;border-radius:6px;border:1px solid #ccc;background:#f9f9f9;cursor:pointer;}
+.feedback{min-height:18px;font-size:13px;}
+.options button.correct{background:#a8f0a5;}
+.options button.wrong{background:#f6a5a5;}
+#finalBadge{padding:12px;text-align:center;font-size:16px;font-weight:bold;border:2px dashed #ccc;border-radius:8px;}
+.footer{text-align:center;padding:6px;font-size:12px;color:#555;background:#eaeaea;}
+.panel-center{display:flex;flex-direction:column;align-items:center;justify-content:center;height:100vh;text-align:center;background:var(--bg);padding:20px;}
+.panel-center button{margin-top:20px;padding:10px 20px;border:none;border-radius:8px;background:var(--accent);color:white;font-size:16px;cursor:pointer;}
+</style>
+</head>
+<body>
+
+<!-- Subjects Page -->
+<div id="subjectsPage">
+  <!-- Navigation Bar -->
+  <nav class="nav-bar">
+    <div class="nav-icons">
+      <span class="nav-icon home-icon" title="Home" onclick="goToHome()">🏠</span>
+      <span class="nav-icon menu-icon" title="Menu" onclick="scrollToTop()">☰</span>
+    </div>
+  </nav>
+  
+  <div class="header-section">
+    <h1 class="title">Choose Your Subject</h1>
+    <p class="subtitle">Select a subject to begin your learning adventure</p>
+  </div>
+  
+  <!-- Subject Tabs -->
+  <div class="subject-tabs">
+    <h3>📚 Available Subjects</h3>
+    <div class="tabs-container">
+      <div class="tab-item" onclick="selectSubject('math')">
+        <div class="tab-icon">🔢</div>
+        <h4>Mathematics</h4>
+        <p>Numbers, equations, and problem solving</p>
+      </div>
+      <div class="tab-item" onclick="showScienceTopics()">
+        <div class="tab-icon">🧪</div>
+        <h4>Science</h4>
+        <p>Explore scientific topics and experiments</p>
+      </div>
+      <div class="tab-item" onclick="selectSubject('social')">
+        <div class="tab-icon">🌍</div>
+        <h4>Social Studies</h4>
+        <p>History, geography, and culture</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Science Topics Modal -->
+<div id="scienceTopicsModal" class="modal">
+  <div class="modal-content">
+    <span class="close" onclick="closeModal('scienceTopicsModal')">&times;</span>
+    <h3>🧪 Science Topics</h3>
+    <p>Choose a science topic to explore:</p>
+    
+    <div class="science-topics-grid">
+      <div class="science-topic-item" onclick="selectScienceTopic('photosynthesis')">
+        <div class="topic-icon">🌿</div>
+        <h4>Photosynthesis</h4>
+        <p>Learn how plants make food from sunlight</p>
+        <div class="play-badge">🎮 Interactive Game</div>
+      </div>
+      
+      <div class="science-topic-item" onclick="selectScienceTopic('rocket-voyage')">
+        <div class="topic-icon">🚀</div>
+        <h4>Rocket Voyage</h4>
+        <p>Build and launch rockets into space</p>
+        <div class="play-badge">🎮 Interactive Game</div>
+      </div>
+      
+      <div class="science-topic-item" onclick="selectScienceTopic('solar-system')">
+        <div class="topic-icon">🪐</div>
+        <h4>Solar System</h4>
+        <p>Explore planets and space objects</p>
+        <div class="coming-soon">Coming Soon</div>
+      </div>
+      
+      <div class="science-topic-item" onclick="selectScienceTopic('chemistry')">
+        <div class="topic-icon">⚗️</div>
+        <h4>Chemistry</h4>
+        <p>Discover atoms and molecules</p>
+        <div class="coming-soon">Coming Soon</div>
+      </div>
+      
+      <div class="science-topic-item" onclick="selectScienceTopic('physics')">
+        <div class="topic-icon">⚡</div>
+        <h4>Physics</h4>
+        <p>Understand forces and energy</p>
+        <div class="coming-soon">Coming Soon</div>
+      </div>
+      
+      <div class="science-topic-item" onclick="selectScienceTopic('biology')">
+        <div class="topic-icon">🧬</div>
+        <h4>Biology</h4>
+        <p>Study living organisms</p>
+        <div class="coming-soon">Coming Soon</div>
+      </div>
+      
+      <div class="science-topic-item" onclick="selectScienceTopic('earth-science')">
+        <div class="topic-icon">🌍</div>
+        <h4>Earth Science</h4>
+        <p>Learn about our planet</p>
+        <div class="coming-soon">Coming Soon</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Game Canvas (hidden initially) -->
+<div id="gameArea" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 2000; background: #f0fff4;">
+  <!-- Intro Screen -->
+  <section id="introScreen" class="panel-center">
+    <h1>🌱 Photosynthesis Game</h1>
+    <p>Learn how plants make food using sunlight, water, and CO₂.</p>
+    <ul style="text-align: left; max-width: 500px; margin: 20px 0;">
+      <li>Plants absorb CO₂ from the air and water from the soil.</li>
+      <li>Chlorophyll in leaves captures sunlight to convert CO₂ & H₂O into Glucose and O₂.</li>
+      <li>Glucose is used by the plant for energy and growth.</li>
+      <li>Oxygen is released into the atmosphere as a byproduct.</li>
+      <li>Try to catch the right molecules and complete the photosynthesis equation!</li>
+    </ul>
+    <button id="startGameBtn">Start Game</button>
+    <button onclick="goBackToSubjects()" style="background: #4CAF50; color: white; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer; font-weight: bold; margin-left: 10px;">📚 Back to Subjects</button>
+  </section>
+
+  <!-- Main Game -->
+  <div id="gameContainer" style="display:none;">
+    <header class="topbar">
+      <h1>🌱 Photosynthesis Game</h1>
+      <div class="equation">
+        6 CO<sub>2</sub> + 6 H<sub>2</sub>O → C<sub>6</sub>H<sub>12</sub>O<sub>6</sub> + 6 O<sub>2</sub>
+      </div>
+      <button id="backToConcept">📖 Concept</button>
+    </header>
+
+    <main class="grid">
+      <!-- Game Section -->
+      <section class="game">
+        <canvas id="gameCanvas"></canvas>
+        <div class="hud">
+          <span>Score: <b id="score">0</b></span>
+          <span>Glucose: <b id="glucose">0</b></span>
+          <span>CO₂: <b id="co2">0</b>/6</span>
+          <span>H₂O: <b id="h2o">0</b>/6</span>
+          <span>O₂: <b id="o2">0</b></span>
+        </div>
+        <div class="controls">
+          <button id="startBtn">Start</button>
+          <button id="stopBtn">Stop</button>
+          <button id="muteBtn">Mute</button>
+        </div>
+      </section>
+
+      <!-- Quiz & Badge Section -->
+      <aside class="sidebar">
+        <section class="quiz">
+          <h2>Quiz Bar</h2>
+          <div class="question">
+            <p>1. Which products are formed by photosynthesis?</p>
+            <div class="options">
+              <button data-correct="false">CO₂ + H₂O</button>
+              <button data-correct="true">Glucose + O₂</button>
+              <button data-correct="false">ATP + NADH</button>
+            </div>
+            <div class="feedback"></div>
+          </div>
+
+          <div class="question">
+            <p>2. What provides energy for photosynthesis?</p>
+            <div class="options">
+              <button data-correct="false">Moonlight</button>
+              <button data-correct="true">Sunlight</button>
+              <button data-correct="false">Wind</button>
+            </div>
+            <div class="feedback"></div>
+          </div>
+
+          <div class="question">
+            <p>3. Which part of the plant mainly performs photosynthesis?</p>
+            <div class="options">
+              <button data-correct="true">Leaves</button>
+              <button data-correct="false">Roots</button>
+              <button data-correct="false">Stems</button>
+            </div>
+            <div class="feedback"></div>
+          </div>
+
+          <div class="question">
+            <p>4. In which cell organelle does photosynthesis occur?</p>
+            <div class="options">
+              <button data-correct="false">Mitochondria</button>
+              <button data-correct="true">Chloroplast</button>
+              <button data-correct="false">Nucleus</button>
+            </div>
+            <div class="feedback"></div>
+          </div>
+
+          <div class="question">
+            <p>5. What gas is released during photosynthesis?</p>
+            <div class="options">
+              <button data-correct="false">CO₂</button>
+              <button data-correct="true">O₂</button>
+              <button data-correct="false">N₂</button>
+            </div>
+            <div class="feedback"></div>
+          </div>
+
+          <button id="finishQuiz">Finish Quiz</button>
+        </section>
+
+        <section class="badges">
+          <h2>🏅 Your Badge</h2>
+          <div id="finalBadge">No badge yet</div>
+        </section>
+      </aside>
+    </main>
+
+    <footer class="footer">
+      <small>Educational Game — Photosynthesis</small>
+    </footer>
+  </div>
+</div>
+
+<!-- Rocket Voyage Game Area (hidden initially) -->
+<div id="rocketGameArea" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 2000; background: var(--space-background);">
+  <div class="rocket-game-container">
+    <!-- Back Button -->
+    <div class="nav-bar">
+      <div class="nav-icons">
+        <span class="nav-icon" onclick="goBackFromRocketGame()" style="background: var(--space-card); color: var(--space-foreground);">← Back to Subjects</span>
+      </div>
+    </div>
+
+    <!-- Game Header -->
+    <div class="rocket-game-header">
+      <h1 class="rocket-game-title">🚀 ROCKET LAUNCH MISSION</h1>
+      
+      <!-- Level Indicators -->
+      <div class="rocket-level-indicators">
+        <div class="level-indicator" id="level1Indicator">
+          <h4>Level 1</h4>
+          <p>Assembly</p>
+        </div>
+        <div class="level-indicator" id="level2Indicator">
+          <h4>Level 2</h4>
+          <p>Preparation</p>
+        </div>
+        <div class="level-indicator" id="level3Indicator">
+          <h4>Level 3</h4>
+          <p>Launch</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Level 1: Rocket Assembly -->
+    <div id="rocketLevel1" class="rocket-level">
+      <h2 style="text-align: center; color: var(--space-foreground); margin-bottom: 30px;">🔧 Rocket Assembly</h2>
+      
+      <div class="rocket-assembly-container">
+        <!-- Rocket Display -->
+        <div class="rocket-display">
+          <h3 style="color: var(--electric-secondary); margin-bottom: 20px;">Rocket Assembly</h3>
+          <div class="rocket-parts-container" id="rocketPartsContainer">
+            <div class="rocket-part" id="part-payload" data-part="payload" onclick="assemblePart('payload')">🛰️</div>
+            <div class="rocket-part" id="part-guidance" data-part="guidance" onclick="assemblePart('guidance')">🧭</div>
+            <div class="rocket-part" id="part-structural" data-part="structural" onclick="assemblePart('structural')">🔧</div>
+            <div class="rocket-part" id="part-propulsion" data-part="propulsion" onclick="assemblePart('propulsion')">🔥</div>
+          </div>
+          
+          <div id="assemblyComplete" style="display: none; text-align: center; margin-top: 20px;">
+            <div style="font-size: 48px; margin-bottom: 15px;">🚀</div>
+            <p style="color: var(--rocket-primary); font-size: 20px; font-weight: bold;">Assembly Complete!</p>
+          </div>
+        </div>
+
+        <!-- Parts Selection Panel -->
+        <div class="parts-selection">
+          <h3 style="color: var(--space-foreground); margin-bottom: 20px;">Rocket Components</h3>
+          
+          <div class="part-card" id="card-payload" onclick="assemblePart('payload')">
+            <div class="part-icon">🛰️</div>
+            <div class="part-info">
+              <h4>Payload</h4>
+              <p>Satellite & Equipment</p>
+            </div>
+          </div>
+          
+          <div class="part-card" id="card-guidance" onclick="assemblePart('guidance')">
+            <div class="part-icon">🧭</div>
+            <div class="part-info">
+              <h4>Guidance System</h4>
+              <p>Navigation & Control</p>
+            </div>
+          </div>
+          
+          <div class="part-card" id="card-structural" onclick="assemblePart('structural')">
+            <div class="part-icon">🔧</div>
+            <div class="part-info">
+              <h4>Structural System</h4>
+              <p>Main Body & Framework</p>
+            </div>
+          </div>
+          
+          <div class="part-card" id="card-propulsion" onclick="assemblePart('propulsion')">
+            <div class="part-icon">🔥</div>
+            <div class="part-info">
+              <h4>Propulsion System</h4>
+              <p>Engines & Fuel Tanks</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <div class="rocket-controls">
+        <button class="rocket-btn" id="nextToLevel2" onclick="goToLevel2()" disabled>Proceed to Launch Preparation</button>
+      </div>
+    </div>
+
+    <!-- Level 2: Launch Preparation -->
+    <div id="rocketLevel2" class="rocket-level" style="display: none;">
+      <div class="countdown-container">
+        <h2 style="color: var(--space-foreground); margin-bottom: 20px;">🎯 Launch Preparation</h2>
+        <p style="color: var(--space-muted-foreground); margin-bottom: 30px;">Systems check and countdown sequence</p>
+        
+        <!-- Countdown Display -->
+        <div class="countdown-display">
+          <div class="countdown-number" id="countdownNumber">30</div>
+          <p style="color: var(--space-muted-foreground); margin: 0;">seconds to launch</p>
+        </div>
+        
+        <!-- System Status -->
+        <div class="system-status">
+          <div class="status-panel">
+            <h4>🔋 Fuel Level</h4>
+            <div class="progress-bar">
+              <div class="progress-fill" id="fuelProgress" style="width: 100%;"></div>
+            </div>
+            <div class="status-value" id="fuelValue">100%</div>
+          </div>
+          
+          <div class="status-panel">
+            <h4>⚡ Engine Power</h4>
+            <div class="progress-bar">
+              <div class="progress-fill" id="speedProgress" style="width: 0%; background: var(--gradient-electric);"></div>
+            </div>
+            <div class="status-value" id="speedValue">0%</div>
+          </div>
+          
+          <div class="status-panel">
+            <h4>📡 Navigation</h4>
+            <div class="status-value" style="color: var(--electric-secondary);">90° Elevation</div>
+            <p style="color: var(--space-muted-foreground); margin: 5px 0 0 0; font-size: 14px;">Optimal launch angle</p>
+          </div>
+        </div>
+        
+        <div class="rocket-controls">
+          <button class="rocket-btn" id="startCountdownBtn" onclick="startCountdown()">Start Countdown</button>
+          <button class="rocket-btn secondary" id="resetCountdownBtn" onclick="resetCountdown()" style="display: none;">Reset</button>
+          <button class="rocket-btn" id="nextToLevel3" onclick="goToLevel3()" disabled>Proceed to Launch</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Level 3: Rocket Launch -->
+    <div id="rocketLevel3" class="rocket-level" style="display: none;">
+      <div class="launch-container">
+        <h2 style="color: var(--space-foreground); margin-bottom: 20px;">🚀 ROCKET LAUNCH</h2>
+        <p style="color: var(--space-muted-foreground); margin-bottom: 30px;">Final countdown - Click to launch!</p>
+        
+        <!-- Launch Display -->
+        <div class="launch-display" id="launchDisplay">
+          <div class="space-background"></div>
+          
+          <div class="rocket-launch-visual">
+            <div class="launch-rocket" id="launchRocket">🚀</div>
+            <div class="rocket-flames" id="rocketFlames" style="opacity: 0;">🔥</div>
+          </div>
+          
+          <div class="launch-ground">🌍</div>
+        </div>
+        
+        <!-- Launch Timer -->
+        <div class="launch-timer">
+          <div class="launch-time" id="launchTime">T+00:00</div>
+        </div>
+        
+        <div class="rocket-controls">
+          <button class="rocket-btn" id="launchBtn" onclick="launchRocket()">🚀 LAUNCH ROCKET</button>
+          <button class="rocket-btn secondary" id="resetLaunchBtn" onclick="resetLaunch()" style="display: none;">Reset Launch</button>
+          <button class="rocket-btn" id="completeMissionBtn" onclick="completeMission()" style="display: none;">Mission Complete!</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Success Message -->
+    <div id="rocketSuccess" class="rocket-success" style="display: none;">
+      <h3>🎉 Mission Successful!</h3>
+      <p>Congratulations! You've successfully built and launched your rocket into space!</p>
+      <div style="margin-top: 20px;">
+        <button class="rocket-btn" onclick="restartRocketGame()">Play Again</button>
+        <button class="rocket-btn secondary" onclick="goBackFromRocketGame()">Back to Subjects</button>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Milestone Alerts -->
+  <div id="milestoneAlert" class="milestone-alerts"></div>
+</div>
+
+<script>
+console.log('Subjects page JavaScript loading...');
+
+// Navigation Functions
+function goToHome() {
+  window.location.href = 'game.html';
+}
+
+function scrollToTop() {
+  window.scrollTo({
+    top: 0,
+    behavior: 'smooth'
+  });
+}
+
+// Modal Functions
+function openModal(modalId) {
+  console.log('Opening modal:', modalId);
+  const modal = document.getElementById(modalId);
+  if (modal) {
+    modal.style.display = 'block';
+  }
+}
+
+function closeModal(modalId) {
+  console.log('Closing modal:', modalId);
+  const modal = document.getElementById(modalId);
+  if (modal) {
+    modal.style.display = 'none';
+  }
+}
+
+// Subject Selection Function
+function selectSubject(subject) {
+  console.log('Selected subject:', subject);
+  
+  if (subject === 'math') {
+    showSubjectMessage('Mathematics games are coming soon! We\'re working on exciting number puzzles and equation challenges.');
+  } else if (subject === 'social') {
+    showSubjectMessage('Social Studies games are coming soon! Explore history, geography, and cultures around the world.');
+  }
+}
+
+function showSubjectMessage(message) {
+  // Create and show message div
+  const messageDiv = document.createElement('div');
+  messageDiv.style.cssText = `
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: white;
+    padding: 30px;
+    border-radius: 15px;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+    z-index: 1001;
+    text-align: center;
+    max-width: 400px;
+    border: 3px solid #4CAF50;
+  `;
+  messageDiv.innerHTML = `
+    <h3 style="color: #2c5234; margin-bottom: 15px;">📚 Subject Information</h3>
+    <p style="color: #666; line-height: 1.5; margin-bottom: 20px;">${message}</p>
+    <button onclick="this.parentElement.remove()" style="background: #4CAF50; color: white; border: none; padding: 12px 24px; border-radius: 8px; cursor: pointer; font-size: 16px;">Got it!</button>
+  `;
+  
+  document.body.appendChild(messageDiv);
+}
+
+// Show Science Topics Modal
+function showScienceTopics() {
+  console.log('Opening Science Topics Modal');
+  
+  // Then show the science topics modal after a brief delay
+  setTimeout(() => {
+    openModal('scienceTopicsModal');
+  }, 100);
+}
+
+function selectScienceTopic(topic) {
+  console.log('Selected science topic:', topic);
+  
+  // Close the science topics modal
+  closeModal('scienceTopicsModal');
+  
+  if (topic === 'photosynthesis') {
+    // Hide the subjects page and show the game
+    document.getElementById('subjectsPage').style.display = 'none';
+    document.getElementById('gameArea').style.display = 'block';
+    
+    // Start the photosynthesis game
+    setTimeout(() => {
+      initializePhotosynthesisGame();
+    }, 100);
+  } else if (topic === 'rocket-voyage') {
+    // Hide the subjects page and show the rocket game
+    document.getElementById('subjectsPage').style.display = 'none';
+    document.getElementById('rocketGameArea').style.display = 'block';
+    
+    // Start the rocket voyage game
+    setTimeout(() => {
+      initializeRocketVoyageGame();
+    }, 100);
+  } else {
+    showSubjectMessage(`${topic.charAt(0).toUpperCase() + topic.slice(1)} content is coming soon! We're working on exciting interactive content for this topic.`);
+  }
+}
+
+function goBackToSubjects() {
+  document.getElementById('gameArea').style.display = 'none';
+  document.getElementById('subjectsPage').style.display = 'block';
+}
+
+// Close modal when clicking outside
+window.addEventListener('click', function(event) {
+  const modals = document.querySelectorAll('.modal');
+  modals.forEach(modal => {
+    if (event.target === modal) {
+      modal.style.display = 'none';
+    }
+  });
+});
+
+// Enhanced Photosynthesis Game Code
+function initializePhotosynthesisGame() {
+  console.log('Initializing Enhanced Photosynthesis Game...');
+  
+  // ===== Intro Screen Logic =====
+  const introScreen = document.getElementById("introScreen");
+  const gameContainer = document.getElementById("gameContainer");
+  const startGameBtn = document.getElementById("startGameBtn");
+  const backToConcept = document.getElementById("backToConcept");
+
+  if (startGameBtn && gameContainer && introScreen) {
+    startGameBtn.onclick = () => { 
+      introScreen.style.display="none"; 
+      gameContainer.style.display="block"; 
+    };
+  }
+  
+  if (backToConcept && introScreen && gameContainer) {
+    backToConcept.onclick = () => { 
+      introScreen.style.display="flex"; 
+      gameContainer.style.display="none"; 
+    };
+  }
+
+  // ===== Game Setup =====
+  const canvas = document.getElementById("gameCanvas");
+  if (!canvas) return;
+  
+  const ctx = canvas.getContext("2d");
+  const startBtn = document.getElementById("startBtn");
+  const stopBtn = document.getElementById("stopBtn");
+  const muteBtn = document.getElementById("muteBtn");
+  const finishQuiz = document.getElementById("finishQuiz");
+
+  let width = canvas.width = window.innerWidth * 0.45;
+  let height = canvas.height = window.innerHeight * 0.5;
+  let running = false, muted = false, finished = false;
+  const STATE = { score: 0, glucose: 0, counts: { CO2: 0, H2O: 0, O2: 0 } };
+  const molecules = [], obstacles = [];
+  const moleculeTypes = ["CO2", "H2O"];
+  const player = { x: width/2, y: height-50, w:60, h:20, speed:6 };
+
+  // Responsive
+  window.addEventListener("resize", () => { 
+    width = canvas.width = window.innerWidth*0.45; 
+    height = canvas.height = window.innerHeight*0.5; 
+    player.y = height-50; 
+  });
+
+  // Draw tree
+  let sway=0;
+  function drawTree() { 
+    sway=Math.sin(Date.now()/300)*5; 
+    ctx.fillStyle="#2d7b3f"; 
+    ctx.beginPath(); 
+    ctx.arc(player.x+sway,player.y-15,25,0,Math.PI*2); 
+    ctx.fill(); 
+    ctx.fillStyle="#8d6e63"; 
+    ctx.fillRect(player.x-6+sway,player.y-15,12,30); 
+    ctx.fillStyle="#000"; 
+    ctx.font="14px sans-serif"; 
+    ctx.textAlign="center"; 
+    ctx.fillText("Tree",player.x+sway,player.y+30); 
+  }
+
+  // Molecules
+  function spawnMolecule(){ 
+    if(molecules.length<4){ 
+      const type=moleculeTypes[Math.floor(Math.random()*moleculeTypes.length)]; 
+      molecules.push({x:Math.random()*width,y:-20,vy:0.3+Math.random()*0.3,r:16,type}); 
+    }
+  }
+  
+  function drawMolecule(m){ 
+    ctx.fillStyle=(m.type==="CO2")?"#5aa5ff":"#93d3ff"; 
+    ctx.beginPath(); 
+    ctx.arc(m.x,m.y,m.r,0,Math.PI*2); 
+    ctx.fill(); 
+    ctx.fillStyle="#000"; 
+    ctx.font="12px sans-serif"; 
+    ctx.textAlign="center"; 
+    ctx.fillText(m.type,m.x,m.y+4);
+  }
+  
+  function checkCatch(m){
+    return Math.abs(m.x-player.x)<player.w/2+m.r && Math.abs(m.y-player.y)<30+m.r;
+  }
+
+  // Obstacles
+  function spawnObstacle(){
+    if(obstacles.length<2){
+      obstacles.push({x:Math.random()*width,y:-20,vy:0.2+Math.random()*0.3,r:20});
+    }
+  }
+  
+  function drawObstacle(o){
+    ctx.fillStyle="#bbb";
+    ctx.beginPath();
+    ctx.arc(o.x,o.y,o.r,0,Math.PI*2);
+    ctx.fill();
+    ctx.arc(o.x+15,o.y+5,o.r-5,0,Math.PI*2);
+    ctx.fill();
+  }
+  
+  function checkHit(o){
+    return Math.abs(o.x-player.x)<player.w/2+o.r && Math.abs(o.y-player.y)<30+o.r;
+  }
+
+  // Produce glucose only if exact 6 CO2 & 6 H2O
+  function produceGlucose(){ 
+    if(STATE.counts.CO2===6 && STATE.counts.H2O===6){ 
+      STATE.counts.CO2=0; 
+      STATE.counts.H2O=0; 
+      STATE.glucose++; 
+      STATE.counts.O2+=6; 
+      STATE.score+=1000; 
+      finished=true; 
+    }
+  }
+
+  // Update
+  function update(){
+    if(finished)return;
+    if(Math.random()<0.015) spawnMolecule();
+    if(Math.random()<0.008) spawnObstacle();
+
+    for(let i=molecules.length-1;i>=0;i--){
+      const m=molecules[i]; 
+      m.y+=m.vy;
+      if(m.y>height){molecules.splice(i,1);continue;}
+      if(checkCatch(m)){ 
+        STATE.counts[m.type]++; 
+        STATE.score+=50; 
+        molecules.splice(i,1); 
+        playSound("catch"); 
+        produceGlucose(); 
+      }
+    }
+
+    for(let j=obstacles.length-1;j>=0;j--){
+      const o=obstacles[j]; 
+      o.y+=o.vy;
+      if(o.y>height){obstacles.splice(j,1);continue;}
+      if(checkHit(o)){ 
+        STATE.score=Math.max(0,STATE.score-100); 
+        obstacles.splice(j,1); 
+        playSound("wrong"); 
+      }
+    }
+  }
+
+  // Render
+  function render(){
+    ctx.clearRect(0,0,width,height);
+    ctx.fillStyle="#ffd54f";
+    ctx.beginPath();
+    ctx.arc(50,50,30,0,Math.PI*2);
+    ctx.fill();
+    molecules.forEach(drawMolecule);
+    obstacles.forEach(drawObstacle);
+    drawTree();
+    
+    const scoreEl = document.getElementById("score");
+    const glucoseEl = document.getElementById("glucose");
+    const co2El = document.getElementById("co2");
+    const h2oEl = document.getElementById("h2o");
+    const o2El = document.getElementById("o2");
+    
+    if (scoreEl) scoreEl.textContent=STATE.score;
+    if (glucoseEl) glucoseEl.textContent=STATE.glucose;
+    if (co2El) co2El.textContent=STATE.counts.CO2;
+    if (h2oEl) h2oEl.textContent=STATE.counts.H2O;
+    if (o2El) o2El.textContent=STATE.counts.O2;
+    
+    if(finished){
+      ctx.fillStyle="rgba(0,0,0,0.6)";
+      ctx.fillRect(0,0,width,height);
+      ctx.fillStyle="white";
+      ctx.font="22px sans-serif";
+      ctx.textAlign="center";
+      ctx.fillText("Equation satisfied! Game Over",width/2,height/2);
+    }
+  }
+
+  // Loop
+  function loop(){
+    if(!running)return;
+    update();
+    render();
+    requestAnimationFrame(loop);
+  }
+
+  // Controls
+  if (startBtn) {
+    startBtn.onclick=()=>{
+      if(running)return;
+      running=true;
+      finished=false;
+      loop();
+    }
+  }
+  
+  if (stopBtn) {
+    stopBtn.onclick=()=>{running=false;}
+  }
+  
+  if (muteBtn) {
+    muteBtn.onclick=()=>{
+      muted=!muted;
+      muteBtn.textContent=muted?"Unmute":"Mute";
+    }
+  }
+
+  // Keyboard & Touch
+  window.addEventListener("keydown",e=>{
+    if(e.key==="ArrowLeft") player.x-=player.speed;
+    if(e.key==="ArrowRight") player.x+=player.speed;
+  });
+  
+  canvas.addEventListener("mousemove",e=>{
+    const r=canvas.getBoundingClientRect();
+    player.x=e.clientX-r.left;
+  });
+  
+  canvas.addEventListener("touchmove",e=>{
+    e.preventDefault();
+    const t=e.touches[0];
+    const r=canvas.getBoundingClientRect();
+    player.x=t.clientX-r.left;
+  },{passive:false});
+
+  // Quiz & Badge
+  let correctCount=0;
+  document.querySelectorAll(".question").forEach(q=>{
+    q.querySelectorAll("button").forEach(btn=>{
+      btn.addEventListener("click",()=>{
+        const correct=btn.dataset.correct==="true";
+        const feedback=q.querySelector(".feedback");
+        if(correct){
+          feedback.textContent="✅ Correct";
+          btn.classList.add("correct");
+          correctCount++;
+        } else {
+          feedback.textContent="❌ Wrong";
+          btn.classList.add("wrong");
+        }
+        playSound(correct?"correct":"wrong");
+        q.querySelectorAll("button").forEach(b=>b.disabled=true);
+      });
+    });
+  });
+
+  if (finishQuiz) {
+    finishQuiz.addEventListener("click",()=>{
+      let badge="No badge";
+      if(correctCount===5) badge="🥇 Gold Badge";
+      else if(correctCount>=3) badge="🥈 Silver Badge";
+      else if(correctCount>=1) badge="🥉 Bronze Badge";
+      const badgeEl = document.getElementById("finalBadge");
+      if (badgeEl) badgeEl.textContent=badge;
+    });
+  }
+
+  // Sound
+  function playSound(type){
+    if(muted) return;
+    try {
+      const ctxA=new (window.AudioContext||window.webkitAudioContext)();
+      const o=ctxA.createOscillator();
+      const g=ctxA.createGain();
+      o.connect(g);
+      g.connect(ctxA.destination);
+      if(type==="catch"){o.frequency.value=600;g.gain.value=0.05;}
+      if(type==="correct"){o.frequency.value=800;g.gain.value=0.1;}
+      if(type==="wrong"){o.frequency.value=200;g.gain.value=0.1;}
+      o.start();
+      o.stop(ctxA.currentTime+0.15);
+    } catch(e) {
+      console.log('Audio not supported');
+    }
+  }
+}
+
+function startPhotosynthesisGame() {
+  console.log('Starting Photosynthesis Game...');
+  
+  const canvas = document.getElementById('gameCanvas');
+  const ctx = canvas.getContext('2d');
+  
+  // Game variables
+  let gameRunning = true;
+  let score = 0;
+  let gameTime = 0;
+  let level = 1;
+  let sunlight = [];
+  let water = [];
+  let co2 = [];
+  let oxygen = [];
+  let particles = [];
+  
+  // Mouse position
+  let mouseX = canvas.width / 2;
+  let mouseY = canvas.height / 2;
+  
+  // Plant position (follows mouse)
+  const plant = {
+    x: canvas.width / 2 - 50,
+    y: canvas.height - 150,
+    width: 100,
+    height: 100,
+    targetX: canvas.width / 2 - 50
+  };
+  
+  // Mouse event listeners
+  canvas.addEventListener('mousemove', (e) => {
+    const rect = canvas.getBoundingClientRect();
+    mouseX = e.clientX - rect.left;
+    mouseY = e.clientY - rect.top;
+    plant.targetX = Math.max(0, Math.min(canvas.width - plant.width, mouseX - plant.width / 2));
+  });
+  
+  // Game objects creation
+  function createSunlight() {
+    if (Math.random() < 0.02 + (level * 0.005)) {
+      sunlight.push({
+        x: Math.random() * canvas.width,
+        y: 0,
+        size: 20 + Math.random() * 10,
+        speed: 1.5 + Math.random(),
+        collected: false,
+        glow: Math.random() * Math.PI * 2
+      });
+    }
+  }
+  
+  function createWater() {
+    if (Math.random() < 0.015 + (level * 0.003)) {
+      water.push({
+        x: Math.random() * canvas.width,
+        y: 0,
+        size: 12 + Math.random() * 8,
+        speed: 2 + Math.random(),
+        collected: false,
+        wobble: Math.random() * Math.PI * 2
+      });
+    }
+  }
+  
+  function createCO2() {
+    if (Math.random() < 0.018 + (level * 0.004)) {
+      co2.push({
+        x: Math.random() * canvas.width,
+        y: 0,
+        size: 16 + Math.random() * 6,
+        speed: 1.8 + Math.random() * 0.8,
+        collected: false,
+        drift: Math.random() * Math.PI * 2
+      });
+    }
+  }
+  
+  function createParticle(x, y, color, type) {
+    particles.push({
+      x: x,
+      y: y,
+      vx: (Math.random() - 0.5) * 4,
+      vy: -Math.random() * 3 - 1,
+      size: Math.random() * 3 + 2,
+      color: color,
+      life: 30 + Math.random() * 20,
+      maxLife: 30 + Math.random() * 20,
+      type: type
+    });
+  }
+  
+  // Collision detection
+  function checkCollision(obj, target) {
+    const distance = Math.sqrt(
+      Math.pow(obj.x + obj.size/2 - (target.x + target.width/2), 2) +
+      Math.pow(obj.y + obj.size/2 - (target.y + target.height/2), 2)
+    );
+    return distance < (obj.size/2 + Math.min(target.width, target.height)/2);
+  }
+  
+  // Update game objects
+  function updateGame() {
+    if (!gameRunning) return;
+    
+    gameTime += 1/60;
+    
+    // Update level
+    level = Math.floor(gameTime / 30) + 1;
+    
+    // Smooth plant movement
+    plant.x += (plant.targetX - plant.x) * 0.1;
+    
+    // Update sunlight
+    sunlight.forEach((sun, index) => {
+      sun.y += sun.speed;
+      sun.glow += 0.1;
+      
+      if (checkCollision(sun, plant) && !sun.collected) {
+        sun.collected = true;
+        score += 10;
+        
+        // Create particles
+        for (let i = 0; i < 5; i++) {
+          createParticle(plant.x + plant.width/2, plant.y, '#FFD700', 'star');
+        }
+        
+        // Create oxygen
+        oxygen.push({
+          x: plant.x + Math.random() * plant.width,
+          y: plant.y,
+          size: 10 + Math.random() * 6,
+          speed: -0.8 - Math.random() * 0.5,
+          life: 120,
+          float: Math.random() * Math.PI * 2
+        });
+      }
+      
+      if (sun.y > canvas.height + sun.size) {
+        sunlight.splice(index, 1);
+      }
+    });
+    
+    // Update water
+    water.forEach((h2o, index) => {
+      h2o.y += h2o.speed;
+      h2o.wobble += 0.1;
+      h2o.x += Math.sin(h2o.wobble) * 0.5;
+      
+      if (checkCollision(h2o, plant) && !h2o.collected) {
+        h2o.collected = true;
+        score += 5;
+        
+        // Create particles
+        for (let i = 0; i < 3; i++) {
+          createParticle(plant.x + plant.width/2, plant.y, '#4169E1', 'water');
+        }
+      }
+      
+      if (h2o.y > canvas.height + h2o.size) {
+        water.splice(index, 1);
+      }
+    });
+    
+    // Update CO2
+    co2.forEach((carbon, index) => {
+      carbon.y += carbon.speed;
+      carbon.drift += 0.05;
+      carbon.x += Math.sin(carbon.drift) * 0.3;
+      
+      if (checkCollision(carbon, plant) && !carbon.collected) {
+        carbon.collected = true;
+        score += 8;
+        
+        // Create particles
+        for (let i = 0; i < 4; i++) {
+          createParticle(plant.x + plant.width/2, plant.y, '#696969', 'smoke');
+        }
+      }
+      
+      if (carbon.y > canvas.height + carbon.size) {
+        co2.splice(index, 1);
+      }
+    });
+    
+    // Update oxygen
+    oxygen.forEach((o2, index) => {
+      o2.y += o2.speed;
+      o2.life--;
+      o2.float += 0.08;
+      o2.x += Math.sin(o2.float) * 0.4;
+      
+      if (o2.life <= 0 || o2.y < -o2.size) {
+        oxygen.splice(index, 1);
+      }
+    });
+    
+    // Update particles
+    particles.forEach((particle, index) => {
+      particle.x += particle.vx;
+      particle.y += particle.vy;
+      particle.vy += 0.05; // gravity
+      particle.life--;
+      
+      if (particle.life <= 0) {
+        particles.splice(index, 1);
+      }
+    });
+  }
+  
+  // Draw game
+  function drawGame() {
+    // Clear canvas
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    
+    // Draw animated background
+    const gradient = ctx.createLinearGradient(0, 0, 0, canvas.height);
+    gradient.addColorStop(0, '#87CEEB');
+    gradient.addColorStop(0.6, '#98FB98');
+    gradient.addColorStop(1, '#228B22');
+    ctx.fillStyle = gradient;
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    
+    // Draw clouds
+    ctx.fillStyle = 'rgba(255, 255, 255, 0.8)';
+    for (let i = 0; i < 3; i++) {
+      const x = (gameTime * 10 + i * 200) % (canvas.width + 100) - 50;
+      drawCloud(x, 50 + i * 20);
+    }
+    
+    // Draw ground
+    ctx.fillStyle = '#8B4513';
+    ctx.fillRect(0, canvas.height - 50, canvas.width, 50);
+    
+    // Draw grass
+    ctx.fillStyle = '#228B22';
+    for (let x = 0; x < canvas.width; x += 20) {
+      for (let i = 0; i < 3; i++) {
+        const grassX = x + Math.random() * 20;
+        const grassHeight = 10 + Math.random() * 15;
+        ctx.fillRect(grassX, canvas.height - 50, 2, -grassHeight);
+      }
+    }
+    
+    // Draw plant with animation
+    const plantBob = Math.sin(gameTime * 2) * 3;
+    
+    // Plant stem
+    ctx.fillStyle = '#228B22';
+    ctx.fillRect(plant.x + 45, plant.y + plantBob, 10, plant.height);
+    
+    // Plant base
+    ctx.fillStyle = '#8B4513';
+    ctx.fillRect(plant.x + 20, plant.y + plant.height - 20 + plantBob, 60, 30);
+    
+    // Plant leaves
+    ctx.fillStyle = '#32CD32';
+    ctx.beginPath();
+    ctx.ellipse(plant.x + 30, plant.y + 20 + plantBob, 25, 15, -0.3, 0, Math.PI * 2);
+    ctx.fill();
+    
+    ctx.beginPath();
+    ctx.ellipse(plant.x + 70, plant.y + 15 + plantBob, 25, 15, 0.3, 0, Math.PI * 2);
+    ctx.fill();
+    
+    ctx.beginPath();
+    ctx.ellipse(plant.x + 50, plant.y + 5 + plantBob, 20, 12, 0, 0, Math.PI * 2);
+    ctx.fill();
+    
+    // Draw particles
+    particles.forEach(particle => {
+      const alpha = particle.life / particle.maxLife;
+      ctx.save();
+      ctx.globalAlpha = alpha;
+      ctx.fillStyle = particle.color;
+      ctx.beginPath();
+      ctx.arc(particle.x, particle.y, particle.size * alpha, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.restore();
+    });
+    
+    // Draw sunlight with glow effect
+    sunlight.forEach(sun => {
+      if (!sun.collected) {
+        // Glow effect
+        ctx.save();
+        ctx.globalAlpha = 0.3;
+        ctx.fillStyle = '#FFD700';
+        ctx.beginPath();
+        ctx.arc(sun.x, sun.y, sun.size * 1.5, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.restore();
+        
+        // Main sun
+        ctx.fillStyle = '#FFD700';
+        ctx.beginPath();
+        ctx.arc(sun.x, sun.y, sun.size, 0, Math.PI * 2);
+        ctx.fill();
+        
+        // Animated sun rays
+        ctx.strokeStyle = '#FFA500';
+        ctx.lineWidth = 3;
+        for (let i = 0; i < 8; i++) {
+          const angle = (i * Math.PI * 2) / 8 + sun.glow;
+          const innerR = sun.size;
+          const outerR = sun.size + 8 + Math.sin(sun.glow * 2) * 3;
+          ctx.beginPath();
+          ctx.moveTo(sun.x + Math.cos(angle) * innerR, sun.y + Math.sin(angle) * innerR);
+          ctx.lineTo(sun.x + Math.cos(angle) * outerR, sun.y + Math.sin(angle) * outerR);
+          ctx.stroke();
+        }
+      }
+    });
+    
+    // Draw water with droplet effect
+    water.forEach(h2o => {
+      if (!h2o.collected) {
+        ctx.fillStyle = '#4169E1';
+        ctx.beginPath();
+        ctx.arc(h2o.x, h2o.y, h2o.size, 0, Math.PI * 2);
+        ctx.fill();
+        
+        // Water highlight
+        ctx.fillStyle = '#87CEEB';
+        ctx.beginPath();
+        ctx.arc(h2o.x - h2o.size/3, h2o.y - h2o.size/3, h2o.size/3, 0, Math.PI * 2);
+        ctx.fill();
+      }
+    });
+    
+    // Draw CO2 with drift effect
+    co2.forEach(carbon => {
+      if (!carbon.collected) {
+        ctx.fillStyle = '#696969';
+        ctx.beginPath();
+        ctx.arc(carbon.x, carbon.y, carbon.size, 0, Math.PI * 2);
+        ctx.fill();
+        
+        // CO2 label
+        ctx.fillStyle = '#FFFFFF';
+        ctx.font = 'bold 12px Arial';
+        ctx.textAlign = 'center';
+        ctx.fillText('CO₂', carbon.x, carbon.y + 4);
+        
+        // Smoke effect
+        ctx.save();
+        ctx.globalAlpha = 0.3;
+        ctx.fillStyle = '#888888';
+        for (let i = 0; i < 3; i++) {
+          const smokeX = carbon.x + Math.sin(carbon.drift + i) * 10;
+          const smokeY = carbon.y - carbon.size - i * 5;
+          ctx.beginPath();
+          ctx.arc(smokeX, smokeY, 3, 0, Math.PI * 2);
+          ctx.fill();
+        }
+        ctx.restore();
+      }
+    });
+    
+    // Draw oxygen with floating animation
+    oxygen.forEach(o2 => {
+      const alpha = o2.life / 120;
+      ctx.save();
+      ctx.globalAlpha = alpha;
+      ctx.fillStyle = '#00CED1';
+      ctx.beginPath();
+      ctx.arc(o2.x, o2.y, o2.size, 0, Math.PI * 2);
+      ctx.fill();
+      
+      // O2 label
+      ctx.fillStyle = '#FFFFFF';
+      ctx.font = 'bold 10px Arial';
+      ctx.textAlign = 'center';
+      ctx.fillText('O₂', o2.x, o2.y + 3);
+      
+      // Bubble effect
+      ctx.strokeStyle = '#FFFFFF';
+      ctx.lineWidth = 2;
+      ctx.beginPath();
+      ctx.arc(o2.x, o2.y, o2.size + 2, 0, Math.PI * 2);
+      ctx.stroke();
+      ctx.restore();
+    });
+    
+    // Draw UI with better styling
+    ctx.save();
+    ctx.fillStyle = 'rgba(0, 0, 0, 0.8)';
+    ctx.fillRect(canvas.width - 220, 10, 200, 100);
+    ctx.strokeStyle = '#4CAF50';
+    ctx.lineWidth = 2;
+    ctx.strokeRect(canvas.width - 220, 10, 200, 100);
+    
+    ctx.fillStyle = '#FFFFFF';
+    ctx.font = 'bold 18px Arial';
+    ctx.textAlign = 'left';
+    ctx.fillText(`Score: ${score}`, canvas.width - 210, 35);
+    ctx.fillText(`Time: ${Math.floor(gameTime)}s`, canvas.width - 210, 55);
+    ctx.fillText(`Level: ${level}`, canvas.width - 210, 75);
+    
+    // Achievement notifications
+    if (score > 0 && score % 100 === 0 && Math.floor(gameTime) % 2 === 0) {
+      ctx.fillStyle = '#FFD700';
+      ctx.font = 'bold 20px Arial';
+      ctx.textAlign = 'center';
+      ctx.fillText(`🏆 ${score} Points!`, canvas.width / 2, 100);
+    }
+    
+    ctx.restore();
+  }
+  
+  function drawCloud(x, y) {
+    ctx.beginPath();
+    ctx.arc(x, y, 20, 0, Math.PI * 2);
+    ctx.arc(x + 25, y, 25, 0, Math.PI * 2);
+    ctx.arc(x + 50, y, 20, 0, Math.PI * 2);
+    ctx.arc(x + 35, y - 15, 15, 0, Math.PI * 2);
+    ctx.fill();
+  }
+  
+  // Game loop
+  function gameLoop() {
+    createSunlight();
+    createWater();
+    createCO2();
+    updateGame();
+    drawGame();
+    
+    if (gameRunning) {
+      requestAnimationFrame(gameLoop);
+    }
+  }
+  
+  // Store game instance for restart functionality
+  gameInstance = {
+    gameRunning,
+    stop: () => { gameRunning = false; }
+  };
+  
+  // Start the game
+  gameLoop();
+}
+
+// Restart game function
+function restartGame() {
+  if (gameInstance) {
+    gameInstance.stop();
+  }
+  startPhotosynthesisGame();
+}
+
+// ========================
+// ROCKET VOYAGE GAME CODE
+// ========================
+
+let rocketGameState = {
+  currentLevel: 1,
+  assembledParts: [],
+  countdownTimer: null,
+  countdownValue: 30,
+  isCountdownActive: false,
+  launchTimer: null,
+  launchTime: 0,
+  isLaunching: false
+};
+
+function initializeRocketVoyageGame() {
+  console.log('Initializing Rocket Voyage Game...');
+  
+  // Reset game state
+  rocketGameState = {
+    currentLevel: 1,
+    assembledParts: [],
+    countdownTimer: null,
+    countdownValue: 30,
+    isCountdownActive: false,
+    launchTimer: null,
+    launchTime: 0,
+    isLaunching: false
+  };
+  
+  // Show first level and update indicators
+  showRocketLevel(1);
+  updateLevelIndicators();
+  
+  // Add initial interactive feedback
+  showRocketToast('🚀 Welcome to Rocket Voyage! Click on parts to assemble your rocket.');
+  
+  // Initialize part hover effects
+  initializePartInteractions();
+}
+
+function initializePartInteractions() {
+  const parts = ['payload', 'guidance', 'structural', 'propulsion'];
+  parts.forEach(partId => {
+    const partElement = document.getElementById(`part-${partId}`);
+    const cardElement = document.getElementById(`card-${partId}`);
+    
+    if (partElement) {
+      partElement.addEventListener('mouseenter', () => {
+        if (!rocketGameState.assembledParts.includes(partId)) {
+          partElement.style.transform = 'scale(1.1)';
+          partElement.style.borderColor = 'var(--electric-secondary)';
+        }
+      });
+      
+      partElement.addEventListener('mouseleave', () => {
+        if (!rocketGameState.assembledParts.includes(partId)) {
+          partElement.style.transform = 'scale(1)';
+          partElement.style.borderColor = 'var(--space-border)';
+        }
+      });
+    }
+    
+    if (cardElement) {
+      cardElement.addEventListener('mouseenter', () => {
+        if (!rocketGameState.assembledParts.includes(partId)) {
+          cardElement.style.transform = 'translateY(-3px)';
+          cardElement.style.boxShadow = '0 8px 20px rgba(0, 188, 212, 0.3)';
+        }
+      });
+      
+      cardElement.addEventListener('mouseleave', () => {
+        if (!rocketGameState.assembledParts.includes(partId)) {
+          cardElement.style.transform = 'translateY(0)';
+          cardElement.style.boxShadow = 'none';
+        }
+      });
+    }
+  });
+}
+
+function showRocketLevel(level) {
+  // Hide all levels
+  document.getElementById('rocketLevel1').style.display = 'none';
+  document.getElementById('rocketLevel2').style.display = 'none';
+  document.getElementById('rocketLevel3').style.display = 'none';
+  document.getElementById('rocketSuccess').style.display = 'none';
+  
+  // Show current level
+  document.getElementById(`rocketLevel${level}`).style.display = 'block';
+  rocketGameState.currentLevel = level;
+  updateLevelIndicators();
+}
+
+function updateLevelIndicators() {
+  const indicators = [
+    document.getElementById('level1Indicator'),
+    document.getElementById('level2Indicator'),
+    document.getElementById('level3Indicator')
+  ];
+  
+  indicators.forEach((indicator, index) => {
+    const level = index + 1;
+    indicator.classList.remove('active', 'completed');
+    
+    if (level === rocketGameState.currentLevel) {
+      indicator.classList.add('active');
+    } else if (level < rocketGameState.currentLevel) {
+      indicator.classList.add('completed');
+    }
+  });
+}
+
+// Level 1: Assembly Functions
+function assemblePart(partId) {
+  if (rocketGameState.assembledParts.includes(partId)) return;
+  
+  // Add part to assembled list
+  rocketGameState.assembledParts.push(partId);
+  
+  // Update visual feedback
+  const partElement = document.getElementById(`part-${partId}`);
+  const cardElement = document.getElementById(`card-${partId}`);
+  
+  if (partElement) {
+    partElement.classList.add('assembled');
+  }
+  
+  if (cardElement) {
+    cardElement.classList.add('assembled');
+    cardElement.style.cursor = 'default';
+  }
+  
+  // Show toast message
+  showRocketToast(`${getPartName(partId)} assembled! 🔧`);
+  
+  // Check if all parts assembled
+  if (rocketGameState.assembledParts.length === 4) {
+    setTimeout(() => {
+      document.getElementById('assemblyComplete').style.display = 'block';
+      document.getElementById('nextToLevel2').disabled = false;
+      showRocketToast('Rocket assembly complete! Ready for Level 2! 🚀');
+    }, 500);
+  }
+}
+
+function getPartName(partId) {
+  const names = {
+    'payload': 'Payload',
+    'guidance': 'Guidance System',
+    'structural': 'Structural System',
+    'propulsion': 'Propulsion System'
+  };
+  return names[partId] || partId;
+}
+
+function goToLevel2() {
+  if (rocketGameState.assembledParts.length < 4) {
+    showRocketToast('Please assemble all rocket parts first!');
+    return;
+  }
+  
+  showRocketLevel(2);
+  showRocketToast('Level 2: Launch Preparation started! 🎯');
+}
+
+// Level 2: Countdown Functions
+function startCountdown() {
+  if (rocketGameState.isCountdownActive) return;
+  
+  rocketGameState.isCountdownActive = true;
+  rocketGameState.countdownValue = 30;
+  
+  document.getElementById('startCountdownBtn').disabled = true;
+  document.getElementById('resetCountdownBtn').style.display = 'inline-block';
+  
+  // Add countdown visual effects
+  const countdownElement = document.getElementById('countdownNumber');
+  countdownElement.style.animation = 'countdownPulse 1s ease-in-out infinite';
+  
+  showRocketToast('Mission countdown initiated! 🎯 Systems check in progress...');
+  
+  rocketGameState.countdownTimer = setInterval(() => {
+    rocketGameState.countdownValue--;
+    document.getElementById('countdownNumber').textContent = rocketGameState.countdownValue;
+    
+    // Update fuel and speed simulation with more realistic progression
+    const progress = (30 - rocketGameState.countdownValue) / 30;
+    const fuel = Math.max(0, 100 - (progress * 15)); // Fuel decreases slower
+    const speed = Math.min(100, progress * 85); // Speed increases to 85%
+    
+    // Animate progress bars
+    const fuelBar = document.getElementById('fuelProgress');
+    const speedBar = document.getElementById('speedProgress');
+    
+    if (fuelBar) {
+      fuelBar.style.width = fuel + '%';
+      document.getElementById('fuelValue').textContent = Math.round(fuel) + '%';
+    }
+    
+    if (speedBar) {
+      speedBar.style.width = speed + '%';
+      document.getElementById('speedValue').textContent = Math.round(speed) + '%';
+    }
+    
+    // Add milestone notifications during countdown
+    if (rocketGameState.countdownValue === 20) {
+      showRocketToast('⚡ Engine systems online!');
+    }
+    if (rocketGameState.countdownValue === 10) {
+      showRocketToast('🔋 Fuel systems ready!');
+      countdownElement.style.color = 'var(--electric-secondary)';
+    }
+    if (rocketGameState.countdownValue === 5) {
+      showRocketToast('🎯 Final systems check...');
+      countdownElement.style.color = 'var(--rocket-primary)';
+      countdownElement.style.fontSize = '120px';
+    }
+    
+    if (rocketGameState.countdownValue <= 0) {
+      clearInterval(rocketGameState.countdownTimer);
+      rocketGameState.isCountdownActive = false;
+      document.getElementById('nextToLevel3').disabled = false;
+      countdownElement.style.animation = 'none';
+      countdownElement.style.color = '#4CAF50';
+      countdownElement.textContent = 'READY';
+      showRocketToast('✅ Countdown complete! Ready for launch! 🚀');
+    }
+  }, 1000);
+}
+
+function resetCountdown() {
+  if (rocketGameState.countdownTimer) {
+    clearInterval(rocketGameState.countdownTimer);
+  }
+  
+  rocketGameState.isCountdownActive = false;
+  rocketGameState.countdownValue = 30;
+  
+  const countdownElement = document.getElementById('countdownNumber');
+  countdownElement.textContent = '30';
+  countdownElement.style.animation = 'none';
+  countdownElement.style.color = 'var(--rocket-primary)';
+  countdownElement.style.fontSize = '96px';
+  
+  document.getElementById('startCountdownBtn').disabled = false;
+  document.getElementById('resetCountdownBtn').style.display = 'none';
+  document.getElementById('nextToLevel3').disabled = true;
+  
+  // Reset progress bars with animation
+  const fuelBar = document.getElementById('fuelProgress');
+  const speedBar = document.getElementById('speedProgress');
+  
+  if (fuelBar) {
+    fuelBar.style.transition = 'width 1s ease';
+    fuelBar.style.width = '100%';
+    document.getElementById('fuelValue').textContent = '100%';
+  }
+  
+  if (speedBar) {
+    speedBar.style.transition = 'width 1s ease';
+    speedBar.style.width = '0%';
+    document.getElementById('speedValue').textContent = '0%';
+  }
+  
+  showRocketToast('🔄 Countdown reset! Ready to start again.');
+}
+
+function goToLevel3() {
+  if (rocketGameState.countdownValue > 0) {
+    showRocketToast('Please complete the countdown first!');
+    return;
+  }
+  
+  showRocketLevel(3);
+  showRocketToast('Level 3: Rocket Launch ready! 🚀');
+}
+
+// Level 3: Launch Functions
+function launchRocket() {
+  if (rocketGameState.isLaunching) return;
+  
+  rocketGameState.isLaunching = true;
+  rocketGameState.launchTime = 0;
+  
+  const launchBtn = document.getElementById('launchBtn');
+  const resetBtn = document.getElementById('resetLaunchBtn');
+  const launchDisplay = document.getElementById('launchDisplay');
+  const rocketElement = document.getElementById('launchRocket');
+  const flamesElement = document.getElementById('rocketFlames');
+  
+  launchBtn.disabled = true;
+  resetBtn.style.display = 'inline-block';
+  
+  // Start launch sequence with visual effects
+  launchDisplay.classList.add('launching');
+  flamesElement.style.opacity = '1';
+  rocketElement.style.fontSize = '72px'; // Make rocket bigger initially
+  
+  showRocketMilestone('🚀 ROCKET LAUNCH INITIATED!');
+  
+  // Add screen shake effect
+  document.body.style.animation = 'shake 2s ease-in-out';
+  setTimeout(() => {
+    document.body.style.animation = 'none';
+  }, 2000);
+  
+  rocketGameState.launchTimer = setInterval(() => {
+    rocketGameState.launchTime++;
+    
+    const minutes = Math.floor(rocketGameState.launchTime / 60);
+    const seconds = rocketGameState.launchTime % 60;
+    document.getElementById('launchTime').textContent = 
+      `T+${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+    
+    // Progressive rocket size reduction as it moves away
+    const progress = rocketGameState.launchTime / 50;
+    const newSize = Math.max(20, 72 - (progress * 50));
+    rocketElement.style.fontSize = newSize + 'px';
+    
+    // Launch milestones with enhanced effects
+    if (rocketGameState.launchTime === 5) {
+      showRocketMilestone('🔥 Main engine ignition!');
+      flamesElement.style.fontSize = '56px';
+    }
+    if (rocketGameState.launchTime === 10) {
+      showRocketMilestone('⬆️ Liftoff successful! Ascending...');
+      // Change flame color/intensity
+      flamesElement.innerHTML = '🔥💫';
+    }
+    if (rocketGameState.launchTime === 20) {
+      showRocketMilestone('🌤️ Passing through cloud layer...');
+    }
+    if (rocketGameState.launchTime === 25) {
+      showRocketMilestone('☁️ Breaking through atmosphere!');
+      // Reduce flame as atmosphere thins
+      flamesElement.style.opacity = '0.7';
+    }
+    if (rocketGameState.launchTime === 35) {
+      showRocketMilestone('🌌 Entering space...');
+      flamesElement.style.opacity = '0.3';
+    }
+    if (rocketGameState.launchTime === 40) {
+      showRocketMilestone('⭐ In space! Coasting to orbit...');
+      flamesElement.style.opacity = '0.1';
+    }
+    if (rocketGameState.launchTime === 50) {
+      clearInterval(rocketGameState.launchTimer);
+      rocketGameState.isLaunching = false;
+      flamesElement.style.opacity = '0';
+      document.getElementById('completeMissionBtn').style.display = 'inline-block';
+      showRocketMilestone('🎉 Mission successful! Rocket in orbit! 🛰️');
+      
+      // Celebration effect
+      createCelebrationEffect();
+    }
+  }, 1000);
+}
+
+// Add celebration effect function
+function createCelebrationEffect() {
+  const colors = ['🎉', '🎊', '⭐', '✨', '🌟'];
+  
+  for (let i = 0; i < 20; i++) {
+    setTimeout(() => {
+      const celebration = document.createElement('div');
+      celebration.innerHTML = colors[Math.floor(Math.random() * colors.length)];
+      celebration.style.cssText = `
+        position: fixed;
+        font-size: 24px;
+        z-index: 10000;
+        pointer-events: none;
+        left: ${Math.random() * window.innerWidth}px;
+        top: ${Math.random() * window.innerHeight}px;
+        animation: celebrationFall 3s ease-out forwards;
+      `;
+      document.body.appendChild(celebration);
+      
+      setTimeout(() => {
+        if (document.body.contains(celebration)) {
+          document.body.removeChild(celebration);
+        }
+      }, 3000);
+    }, i * 100);
+  }
+}
+
+function resetLaunch() {
+  if (rocketGameState.launchTimer) {
+    clearInterval(rocketGameState.launchTimer);
+  }
+  
+  rocketGameState.isLaunching = false;
+  rocketGameState.launchTime = 0;
+  
+  document.getElementById('launchTime').textContent = 'T+00:00';
+  document.getElementById('launchBtn').disabled = false;
+  document.getElementById('resetLaunchBtn').style.display = 'none';
+  document.getElementById('completeMissionBtn').style.display = 'none';
+  document.getElementById('launchDisplay').classList.remove('launching');
+  document.getElementById('rocketFlames').style.opacity = '0';
+}
+
+function completeMission() {
+  document.getElementById('rocketLevel3').style.display = 'none';
+  document.getElementById('rocketSuccess').style.display = 'block';
+  showRocketToast('🎉 Congratulations! Mission accomplished!');
+}
+
+// Utility Functions
+function showRocketToast(message) {
+  // Create toast element
+  const toast = document.createElement('div');
+  toast.textContent = message;
+  toast.style.cssText = `
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    background: var(--space-card);
+    color: var(--space-foreground);
+    padding: 15px 20px;
+    border-radius: 10px;
+    border: 1px solid var(--rocket-primary);
+    box-shadow: var(--glow-rocket);
+    z-index: 10000;
+    font-weight: bold;
+    max-width: 300px;
+    animation: slideIn 0.3s ease-out;
+  `;
+  
+  document.body.appendChild(toast);
+  
+  // Remove after 3 seconds
+  setTimeout(() => {
+    toast.style.animation = 'slideOut 0.3s ease-in';
+    setTimeout(() => {
+      if (document.body.contains(toast)) {
+        document.body.removeChild(toast);
+      }
+    }, 300);
+  }, 3000);
+}
+
+function showRocketMilestone(message) {
+  const alert = document.getElementById('milestoneAlert');
+  alert.textContent = message;
+  alert.style.display = 'block';
+  
+  setTimeout(() => {
+    alert.style.display = 'none';
+  }, 2500);
+}
+
+function restartRocketGame() {
+  // Reset all parts
+  const parts = ['payload', 'guidance', 'structural', 'propulsion'];
+  parts.forEach(part => {
+    document.getElementById(`part-${part}`).classList.remove('assembled');
+    document.getElementById(`card-${part}`).classList.remove('assembled');
+    document.getElementById(`card-${part}`).style.cursor = 'pointer';
+  });
+  
+  // Hide assembly complete message
+  document.getElementById('assemblyComplete').style.display = 'none';
+  document.getElementById('nextToLevel2').disabled = true;
+  
+  // Reset countdown
+  resetCountdown();
+  
+  // Reset launch
+  resetLaunch();
+  
+  // Initialize game
+  initializeRocketVoyageGame();
+  showRocketToast('Rocket game restarted! 🚀');
+}
+
+function goBackFromRocketGame() {
+  // Clean up any running timers
+  if (rocketGameState.countdownTimer) {
+    clearInterval(rocketGameState.countdownTimer);
+  }
+  if (rocketGameState.launchTimer) {
+    clearInterval(rocketGameState.launchTimer);
+  }
+  
+  // Hide rocket game and show subjects page
+  document.getElementById('rocketGameArea').style.display = 'none';
+  document.getElementById('subjectsPage').style.display = 'block';
+  
+  // Reset game state
+  restartRocketGame();
+}
+
+// Add CSS animations for toasts
+const rocketAnimations = document.createElement('style');
+rocketAnimations.textContent = `
+  @keyframes slideIn {
+    from { transform: translateX(100%); opacity: 0; }
+    to { transform: translateX(0); opacity: 1; }
+  }
+  
+  @keyframes slideOut {
+    from { transform: translateX(0); opacity: 1; }
+    to { transform: translateX(100%); opacity: 0; }
+  }
+`;
+document.head.appendChild(rocketAnimations);
+
+</script>
+
+</body>
+</html>

@@ -1,0 +1,954 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>EverLearners - Photosynthesis Game</title>
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<!-- Home Page -->
+<div id="homePage">
+  <!-- Navigation Bar -->
+  <nav class="nav-bar">
+    <div class="nav-icons">
+      <span class="nav-icon home-icon" title="Home" onclick="scrollToTop()">🏠</span>
+      <span class="nav-icon menu-icon" title="Menu" onclick="scrollToSubjectTabs()">☰</span>
+    </div>
+  </nav>
+  
+  <div class="header-section">
+    <div id="logo"></div>
+    
+    <h1 class="title">EverLearners</h1>
+    <p class="subtitle">Learn, Play, and Grow with Interactive Educational Games</p>
+    
+    <div class="app-info">
+      <h3>🌟 Welcome to Your Learning Adventure!</h3>
+      <p>EverLearners is an innovative educational platform that transforms learning into an exciting gaming experience. Our interactive games help students understand complex scientific concepts through hands-on gameplay.</p>
+      
+      <ul class="features-list">
+        <li>Interactive Science Games</li>
+        <li>Real-time Learning Progress Tracking</li>
+        <li>Engaging Visual Learning Experience</li>
+        <li>Educational Content Based on Curriculum</li>
+        <li>Fun and Rewarding Achievement System</li>
+      </ul>
+      
+      <p>Start your journey with our Photosynthesis Game and discover how plants create energy from sunlight, water, and carbon dioxide!</p>
+    </div>
+  </div>
+  
+  <div class="auth-buttons">
+    <button class="btn btn-signup" onclick="openModal('signupModal')">Sign Up</button>
+    <button class="btn btn-signin" onclick="openModal('signinModal')">Sign In</button>
+  </div>
+  
+  <!-- Subject Tabs -->
+  <div class="subject-tabs">
+    <h3>📚 Choose Your Subject</h3>
+    <div class="tabs-container">
+      <div class="tab-item" onclick="selectSubject('math')">
+        <div class="tab-icon">🔢</div>
+        <h4>Mathematics</h4>
+        <p>Numbers, equations, and problem solving</p>
+      </div>
+      <div class="tab-item" onclick="showScienceTopics()">
+        <div class="tab-icon">🧪</div>
+        <h4>Science</h4>
+        <p>Explore scientific topics and experiments</p>
+      </div>
+      <div class="tab-item" onclick="selectSubject('social')">
+        <div class="tab-icon">🌍</div>
+        <h4>Social Studies</h4>
+        <p>History, geography, and culture</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Signup Modal -->
+<div id="signupModal" class="modal">
+  <div class="modal-content">
+    <span class="close" onclick="closeModal('signupModal')">&times;</span>
+    <h3>Join EverLearners</h3>
+    <form id="signupForm">
+      <div class="form-group">
+        <label for="signupName">Full Name:</label>
+        <input type="text" id="signupName" required>
+      </div>
+      <div class="form-group">
+        <label for="signupEmail">Email:</label>
+        <input type="email" id="signupEmail" required>
+      </div>
+      <div class="form-group">
+        <label for="signupPassword">Password:</label>
+        <input type="password" id="signupPassword" required>
+      </div>
+      <div class="form-group">
+        <label for="signupMobile">Mobile Number:</label>
+        <input type="tel" id="signupMobile" pattern="[0-9]{10}" placeholder="1234567890" required>
+      </div>
+      <div class="form-group">
+        <label for="signupClass">Class:</label>
+        <select id="signupClass" required>
+          <option value="">Select your class</option>
+          <option value="6">Class 6</option>
+          <option value="7">Class 7</option>
+          <option value="8">Class 8</option>
+          <option value="9">Class 9</option>
+          <option value="10">Class 10</option>
+          <option value="11">Class 11</option>
+          <option value="12">Class 12</option>
+          <option value="college">College</option>
+          <option value="other">Other</option>
+        </select>
+      </div>
+      <button type="submit" class="btn">Create Account</button>
+    </form>
+  </div>
+</div>
+
+<!-- Sign In Modal -->
+<div id="signinModal" class="modal">
+  <div class="modal-content">
+    <span class="close" onclick="closeModal('signinModal')">&times;</span>
+    <h3>Welcome Back to EverLearners</h3>
+    <form id="signinForm">
+      <div class="form-group">
+        <label for="signinEmail">Email:</label>
+        <input type="email" id="signinEmail" required>
+      </div>
+      <div class="form-group">
+        <label for="signinPassword">Password:</label>
+        <input type="password" id="signinPassword" required>
+      </div>
+      <button type="submit" class="btn">Sign In</button>
+      <p class="form-footer">Don't have an account? <a href="#" onclick="closeModal('signinModal'); openModal('signupModal');">Sign up here</a></p>
+    </form>
+  </div>
+</div>
+
+<!-- Science Topics Modal -->
+<div id="scienceTopicsModal" class="modal">
+  <div class="modal-content">
+    <span class="close" onclick="closeModal('scienceTopicsModal')">&times;</span>
+    <h3>🧪 Science Topics</h3>
+    <p>Choose a science topic to explore:</p>
+    
+    <div class="science-topics-grid">
+      <div class="science-topic-item" onclick="selectScienceTopic('photosynthesis')">
+        <div class="topic-icon">🌿</div>
+        <h4>Photosynthesis</h4>
+        <p>Learn how plants make food from sunlight</p>
+        <div class="play-badge">🎮 Interactive Game</div>
+      </div>
+      
+      <div class="science-topic-item" onclick="selectScienceTopic('solar-system')">
+        <div class="topic-icon">🪐</div>
+        <h4>Solar System</h4>
+        <p>Explore planets and space objects</p>
+        <div class="coming-soon">Coming Soon</div>
+      </div>
+      
+      <div class="science-topic-item" onclick="selectScienceTopic('chemistry')">
+        <div class="topic-icon">⚗️</div>
+        <h4>Chemistry</h4>
+        <p>Discover atoms and molecules</p>
+        <div class="coming-soon">Coming Soon</div>
+      </div>
+      
+      <div class="science-topic-item" onclick="selectScienceTopic('physics')">
+        <div class="topic-icon">⚡</div>
+        <h4>Physics</h4>
+        <p>Understand forces and energy</p>
+        <div class="coming-soon">Coming Soon</div>
+      </div>
+      
+      <div class="science-topic-item" onclick="selectScienceTopic('biology')">
+        <div class="topic-icon">🧬</div>
+        <h4>Biology</h4>
+        <p>Study living organisms</p>
+        <div class="coming-soon">Coming Soon</div>
+      </div>
+      
+      <div class="science-topic-item" onclick="selectScienceTopic('earth-science')">
+        <div class="topic-icon">🌍</div>
+        <h4>Earth Science</h4>
+        <p>Learn about our planet</p>
+        <div class="coming-soon">Coming Soon</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Game Container (Hidden initially) -->
+<div id="gameContainer">
+  <button class="back-btn" onclick="goHome()">← Back to Home</button>
+  <h1>🌞 Photosynthesis Game 🌿</h1>
+
+<div id="gameArea">
+  <div id="player" class="player">🌳</div>
+</div>
+
+<div id="hud">
+  Score: <span id="score">0</span> | 
+  Energy: <span id="energy">0</span>
+</div>
+
+<div id="equation">
+  Equation: 6 CO₂ + 6 H₂O + Sunlight → C₆H₁₂O₆ + 6 O₂
+</div>
+
+<div id="message"></div>
+</div>
+
+<script>
+console.log('JavaScript loading...');
+
+// Test function to check if JavaScript is working
+function testButton() {
+  alert('Button clicked! JavaScript is working.');
+  openModal('signupModal');
+}
+
+// Authentication and Navigation
+let currentUser = null;
+
+// Navigation Functions
+function scrollToSubjectTabs() {
+  // Navigate to subjects page in a new tab/window
+  window.open('subjects.html', '_blank');
+}
+
+function scrollToTop() {
+  window.scrollTo({
+    top: 0,
+    behavior: 'smooth'
+  });
+}
+
+// Modal Functions
+function openModal(modalId) {
+  console.log('Opening modal:', modalId);
+  const modal = document.getElementById(modalId);
+  if (modal) {
+    modal.style.display = 'block';
+    console.log('Modal opened successfully:', modalId);
+  } else {
+    console.error('Modal not found:', modalId);
+  }
+}
+
+// Dedicated Sign In function
+function openSignIn() {
+  console.log('openSignIn called');
+  try {
+    const modal = document.getElementById('signinModal');
+    console.log('Modal element:', modal);
+    if (modal) {
+      modal.style.display = 'block';
+      modal.style.zIndex = '9999';
+      console.log('Modal opened successfully');
+    } else {
+      console.error('Modal not found');
+      alert('Modal not found');
+    }
+  } catch (error) {
+    console.error('Error in openSignIn:', error);
+    alert('Error: ' + error.message);
+  }
+}
+
+// Subject Selection Function
+function selectSubject(subject) {
+  console.log('Selected subject:', subject);
+  
+  // Remove active class from all tabs
+  const tabs = document.querySelectorAll('.tab-item');
+  tabs.forEach(tab => tab.classList.remove('active'));
+  
+  // Add active class to selected tab
+  event.target.closest('.tab-item').classList.add('active');
+  
+  // Store selected subject
+  localStorage.setItem('selectedSubject', subject);
+  
+  // Show selection message
+  const messages = {
+    math: '🔢 Great choice! Mathematics will challenge your problem-solving skills.',
+    science: '🧪 Excellent! Choose a science topic to explore different areas of scientific discovery.',
+    social: '🌍 Perfect! Social Studies will expand your knowledge of history and culture.'
+  };
+  
+  // Show temporary message
+  showSubjectMessage(messages[subject]);
+  
+  // Note: Science topics are now handled by showScienceTopics() function
+}
+
+// Show subject selection message
+function showSubjectMessage(message) {
+  // Create or update message element
+  let messageDiv = document.getElementById('subjectMessage');
+  if (!messageDiv) {
+    messageDiv = document.createElement('div');
+    messageDiv.id = 'subjectMessage';
+    messageDiv.className = 'subject-message';
+    document.querySelector('.subject-tabs').appendChild(messageDiv);
+  }
+  
+  messageDiv.textContent = message;
+  messageDiv.style.display = 'block';
+  
+  // Hide message after 3 seconds
+  setTimeout(() => {
+    messageDiv.style.display = 'none';
+  }, 3000);
+}
+
+// Show Science Topics Modal
+function showScienceTopics() {
+  // First select science as the main subject
+  selectSubject('science');
+  
+  // Then show the science topics modal after a brief delay
+  setTimeout(() => {
+    openModal('scienceTopicsModal');
+  }, 800);
+}
+
+// Handle Science Topic Selection
+function selectScienceTopic(topic) {
+  console.log('Selected science topic:', topic);
+  
+  // Close the science topics modal
+  closeModal('scienceTopicsModal');
+  
+  // Handle different science topics
+  switch(topic) {
+    case 'photosynthesis':
+      // Show message and start game
+      showSubjectMessage('🌿 Starting Photosynthesis Game! Learn how plants create energy from sunlight, water, and CO2!');
+      setTimeout(() => {
+        startGame('Science Explorer - Photosynthesis');
+      }, 2000);
+      break;
+      
+    case 'solar-system':
+    case 'chemistry':
+    case 'physics':
+    case 'biology':
+    case 'earth-science':
+      showSubjectMessage('🚧 This topic is coming soon! More interactive science games will be available.');
+      break;
+      
+    default:
+      console.log('Unknown science topic:', topic);
+  }
+}
+
+function closeModal(modalId) {
+  console.log('Closing modal:', modalId);
+  const modal = document.getElementById(modalId);
+  if (modal) {
+    modal.style.display = 'none';
+  }
+  const loginAlert = document.getElementById('loginAlert');
+  if (loginAlert) {
+    loginAlert.style.display = 'none';
+  }
+}
+
+function closeLoginAlert() {
+  const loginAlert = document.getElementById('loginAlert');
+  if (loginAlert) {
+    loginAlert.style.display = 'none';
+  }
+}
+
+// Close modal when clicking outside of it
+window.addEventListener('click', function(event) {
+  const modals = document.querySelectorAll('.modal');
+  modals.forEach(modal => {
+    if (event.target === modal) {
+      modal.style.display = 'none';
+      const loginAlert = document.getElementById('loginAlert');
+      if (loginAlert) {
+        loginAlert.style.display = 'none';
+      }
+    }
+  });
+});
+
+// Simple local storage functions
+function getUsers() {
+  try {
+    return JSON.parse(localStorage.getItem('everlearners_users') || '[]');
+  } catch (e) {
+    console.error('Error getting users:', e);
+    return [];
+  }
+}
+
+function saveUser(user) {
+  try {
+    let users = getUsers();
+    users.push(user);
+    localStorage.setItem('everlearners_users', JSON.stringify(users));
+    console.log('User saved:', user.name);
+  } catch (e) {
+    console.error('Error saving user:', e);
+  }
+}
+
+function findUser(email) {
+  try {
+    let users = getUsers();
+    return users.find(user => user.email.toLowerCase() === email.toLowerCase());
+  } catch (e) {
+    console.error('Error finding user:', e);
+    return null;
+  }
+}
+
+// Wait for DOM to be ready
+document.addEventListener('DOMContentLoaded', function() {
+  console.log('DOM loaded, setting up event listeners...');
+  
+  // Set up email check
+  const signupEmailInput = document.getElementById('signupEmail');
+  if (signupEmailInput) {
+    signupEmailInput.addEventListener('blur', function() {
+      const email = this.value.trim();
+      if (email && email.includes('@')) {
+        const existingUser = findUser(email);
+        if (existingUser) {
+          const loginAlert = document.getElementById('loginAlert');
+          const loginAlertMessage = document.getElementById('loginAlertMessage');
+          const loginEmail = document.getElementById('loginEmail');
+          
+          if (loginAlert && loginAlertMessage && loginEmail) {
+            loginAlert.style.display = 'block';
+            loginAlertMessage.textContent = 'This email is already registered! Please login instead.';
+            loginEmail.value = email;
+          }
+        }
+      }
+    });
+  }
+  
+  // Set up signup form
+  const signupForm = document.getElementById('signupForm');
+  if (signupForm) {
+    signupForm.addEventListener('submit', handleSignup);
+  }
+  
+  // Set up login form
+  const loginForm = document.getElementById('loginForm');
+  if (loginForm) {
+    loginForm.addEventListener('submit', handleLogin);
+  }
+  
+  // Set up signin form
+  const signinForm = document.getElementById('signinForm');
+  if (signinForm) {
+    signinForm.addEventListener('submit', handleSignin);
+  }
+});
+
+// Handle Sign Up Form
+function handleSignup(e) {
+  e.preventDefault();
+  console.log('Signup form submitted');
+  
+  const name = document.getElementById('signupName').value.trim();
+  const email = document.getElementById('signupEmail').value.trim();
+  const password = document.getElementById('signupPassword').value;
+  const mobile = document.getElementById('signupMobile').value.trim();
+  const className = document.getElementById('signupClass').value;
+  
+  console.log('Form data:', { name, email, mobile, className });
+  
+  // Validate all fields are filled
+  if (!name || !email || !password || !mobile || !className) {
+    alert('Please fill in all fields');
+    return;
+  }
+  
+  // Validate email format
+  if (!email.includes('@') || !email.includes('.')) {
+    alert('Please enter a valid email address');
+    return;
+  }
+  
+  // Validate mobile number (10 digits)
+  if (!/^[0-9]{10}$/.test(mobile)) {
+    alert('Please enter a valid 10-digit mobile number');
+    return;
+  }
+  
+  // Check if user already exists
+  const existingUser = findUser(email);
+  if (existingUser) {
+    // Close signup modal and open signin modal
+    closeModal('signupModal');
+    openModal('signinModal');
+    
+    // Pre-fill the signin email
+    const signinEmail = document.getElementById('signinEmail');
+    if (signinEmail) {
+      signinEmail.value = email;
+    }
+    
+    alert('This email is already registered! Please sign in instead.');
+    return;
+  }
+  
+  // Create new user with all details
+  const newUser = {
+    id: Date.now().toString(),
+    name: name,
+    email: email,
+    password: password,
+    mobile: mobile,
+    className: className,
+    createdAt: new Date().toISOString()
+  };
+  
+  // Save user
+  saveUser(newUser);
+  
+  // Display user details in success message
+  const classDisplay = className === 'college' ? 'College' : 
+                      className === 'other' ? 'Other' : 
+                      'Class ' + className;
+  
+  const userDetails = `🎉 Account Created Successfully! 🎉
+
+📋 Your Details:
+👤 Name: ${name}
+📧 Email: ${email}
+📱 Mobile: ${mobile}
+🎓 Class: ${classDisplay}
+
+Welcome to EverLearners, ${name}!`;
+  
+  alert(userDetails);
+  
+  // Close modal and start game
+  closeModal('signupModal');
+  currentUser = newUser;
+  
+  // Show user info in game
+  startGameWithUserInfo(newUser);
+  
+  // Reset form
+  document.getElementById('signupForm').reset();
+}
+
+// Handle Login Form
+function handleLogin(e) {
+  e.preventDefault();
+  console.log('Login form submitted');
+  
+  const email = document.getElementById('loginEmail').value.trim();
+  const password = document.getElementById('loginPassword').value;
+  
+  if (!email || !password) {
+    alert('Please enter both email and password');
+    return;
+  }
+  
+  // Find user
+  const user = findUser(email);
+  if (!user) {
+    alert('No account found with this email. Please sign up first.');
+    return;
+  }
+  
+  if (user.password !== password) {
+    alert('Incorrect password. Please try again.');
+    return;
+  }
+  
+  // Show welcome back message with user details
+  const classDisplay = user.className === 'college' ? 'College' : 
+                      user.className === 'other' ? 'Other' : 
+                      'Class ' + user.className;
+  
+  const welcomeMessage = `🎉 Welcome Back! 🎉
+
+📋 Your Details:
+👤 Name: ${user.name}
+📧 Email: ${user.email}
+📱 Mobile: ${user.mobile}
+🎓 Class: ${classDisplay}
+
+Let's continue learning, ${user.name}!`;
+  
+  alert(welcomeMessage);
+  
+  closeModal('signupModal');
+  currentUser = user;
+  
+  // Start game with user info
+  startGameWithUserInfo(user);
+  
+  // Reset form
+  document.getElementById('loginForm').reset();
+}
+
+// Handle Sign In Form (for the new signin modal)
+function handleSignin(e) {
+  e.preventDefault();
+  console.log('Signin form submitted');
+  
+  const email = document.getElementById('signinEmail').value.trim();
+  const password = document.getElementById('signinPassword').value;
+  
+  if (!email || !password) {
+    alert('Please enter both email and password');
+    return;
+  }
+  
+  // Find user
+  const user = findUser(email);
+  if (!user) {
+    alert('No account found with this email. Please sign up first.');
+    return;
+  }
+  
+  if (user.password !== password) {
+    alert('Incorrect password. Please try again.');
+    return;
+  }
+  
+  // Show welcome back message with user details
+  const classDisplay = user.className === 'college' ? 'College' : 
+                      user.className === 'other' ? 'Other' : 
+                      'Class ' + user.className;
+  
+  const welcomeMessage = `🎉 Welcome Back! 🎉
+
+📋 Your Details:
+👤 Name: ${user.name}
+📧 Email: ${user.email}
+📱 Mobile: ${user.mobile}
+🎓 Class: ${classDisplay}
+
+Let's continue learning, ${user.name}!`;
+  
+  alert(welcomeMessage);
+  
+  closeModal('signinModal');
+  currentUser = user;
+  
+  // Start game with user info
+  startGameWithUserInfo(user);
+  
+  // Reset form
+  document.getElementById('signinForm').reset();
+}
+
+// Enhanced start game function with user info
+function startGameWithUserInfo(user) {
+  document.getElementById('homePage').style.display = 'none';
+  document.getElementById('gameContainer').style.display = 'block';
+  
+  // Update game title with user details
+  const gameTitle = document.querySelector('#gameContainer h1');
+  const classDisplay = user.className === 'college' ? 'College' : 
+                      user.className === 'other' ? 'Other' : 
+                      'Class ' + user.className;
+  
+  if (gameTitle) {
+    gameTitle.innerHTML = `🌞 Welcome ${user.name}! (${classDisplay}) - Photosynthesis Game 🌿`;
+  }
+  
+  // Add user info panel
+  addUserInfoPanel(user);
+  
+  // Initialize game
+  initializeGame();
+}
+
+// Add user info panel to game
+function addUserInfoPanel(user) {
+  // Remove existing user info if any
+  const existingInfo = document.getElementById('userInfo');
+  if (existingInfo) {
+    existingInfo.remove();
+  }
+  
+  // Create user info panel
+  const userInfoDiv = document.createElement('div');
+  userInfoDiv.id = 'userInfo';
+  userInfoDiv.style.cssText = `
+    position: absolute;
+    top: 60px;
+    right: 20px;
+    background: rgba(255,255,255,0.9);
+    padding: 10px;
+    border-radius: 8px;
+    font-size: 12px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+    max-width: 200px;
+    z-index: 100;
+  `;
+  
+  const classDisplay = user.className === 'college' ? 'College' : 
+                      user.className === 'other' ? 'Other' : 
+                      'Class ' + user.className;
+  
+  userInfoDiv.innerHTML = `
+    <strong>Player Info:</strong><br>
+    👤 ${user.name}<br>
+    📧 ${user.email}<br>
+    📱 ${user.mobile}<br>
+    🎓 ${classDisplay}
+  `;
+  
+  const gameContainer = document.getElementById('gameContainer');
+  if (gameContainer) {
+    gameContainer.appendChild(userInfoDiv);
+  }
+}
+
+console.log('JavaScript loaded successfully!');
+
+// Start Game Function (fallback for guest users)
+function startGame(userName) {
+  document.getElementById('homePage').style.display = 'none';
+  document.getElementById('gameContainer').style.display = 'block';
+  
+  // Update game title with user name
+  const gameTitle = document.querySelector('#gameContainer h1');
+  if (gameTitle && userName !== 'Guest') {
+    gameTitle.innerHTML = `🌞 Welcome ${userName}! Photosynthesis Game 🌿`;
+  }
+  
+  // Initialize game
+  initializeGame();
+}
+
+// Go back to home page
+function goHome() {
+  document.getElementById('gameContainer').style.display = 'none';
+  document.getElementById('homePage').style.display = 'block';
+  
+  // Reset game state
+  resetGame();
+}
+
+// Game Variables
+let game, player;
+let score=0,energy=0;
+let keys={},collectibles=[],obstacles=[];
+let gameOver=false;
+let gameInitialized = false;
+
+// Sounds
+const collectSound=new Audio("https://actions.google.com/sounds/v1/cartoon/wood_plank_flicks.ogg");
+const glucoseSound=new Audio("https://actions.google.com/sounds/v1/cartoon/pop.ogg");
+
+// Types of collectibles
+const collectibleTypes=[
+  {emoji:"☀",value:5},   // Sunlight
+  {emoji:"🌫",value:3},   // CO2
+  {emoji:"💧",value:2}    // H2O
+];
+
+// Initialize Game
+function initializeGame() {
+  if (gameInitialized) return;
+  gameInitialized = true;
+  
+  // Get DOM elements
+  game = document.getElementById("gameArea");
+  player = document.getElementById("player");
+  
+  if (!game || !player) {
+    console.error('Game elements not found!');
+    return;
+  }
+  
+  // Game loops
+  setInterval(update,30);
+  setInterval(spawnObstacle,2000);
+  setInterval(spawnCollectible,1000);
+}
+
+// Reset Game
+function resetGame() {
+  gameOver = false;
+  score = 0;
+  energy = 0;
+  
+  // Clear collectibles and obstacles
+  collectibles.forEach(c => c.remove());
+  obstacles.forEach(o => o.remove());
+  collectibles = [];
+  obstacles = [];
+  
+  // Reset player
+  if (player) {
+    player.innerText = "🌳";
+    player.style.left = "220px";
+  }
+  
+  // Update HUD
+  const scoreElement = document.getElementById("score");
+  const energyElement = document.getElementById("energy");
+  const messageElement = document.getElementById("message");
+  
+  if (scoreElement) scoreElement.innerText = score;
+  if (energyElement) energyElement.innerText = energy;
+  if (messageElement) messageElement.innerText = "";
+}
+
+// Spawn collectible (random type)
+function spawnCollectible(){
+  if(gameOver || !game) return;
+  let type=collectibleTypes[Math.floor(Math.random()*collectibleTypes.length)];
+  let c=document.createElement("div");
+  c.className="collectible";
+  c.innerText=type.emoji;
+  c.energyValue=type.value;
+  c.x=Math.random()*460;
+  c.y=0;
+  c.style.left=c.x+"px";
+  c.style.top=c.y+"px";
+  game.appendChild(c);
+  collectibles.push(c);
+}
+
+// Go back to home page
+function goHome() {
+  document.getElementById('gameContainer').style.display = 'none';
+  document.getElementById('homePage').style.display = 'block';
+  
+  // Reset game state
+  resetGame();
+}
+
+// Spawn collectible (random type)
+function spawnCollectible(){
+  if(gameOver || !game) return;
+  let type=collectibleTypes[Math.floor(Math.random()*collectibleTypes.length)];
+  let c=document.createElement("div");
+  c.className="collectible";
+  c.innerText=type.emoji;
+  c.energyValue=type.value;
+  c.x=Math.random()*460;
+  c.y=0;
+  c.style.left=c.x+"px";
+  c.style.top=c.y+"px";
+  c.style.position="absolute";
+  game.appendChild(c);
+  collectibles.push(c);
+}
+
+// Spawn obstacle (random rock)
+function spawnObstacle(){
+  if(gameOver || !game) return;
+  let o=document.createElement("div");
+  o.className="obstacle";
+  o.innerText="🪨";
+  o.x=Math.random()*460;
+  o.y=0;
+  o.style.left=o.x+"px";
+  o.style.top=o.y+"px";
+  o.style.position="absolute";
+  game.appendChild(o);
+  obstacles.push(o);
+}
+
+// Update loop
+function update(){
+  if(gameOver || !game || !player) return;
+
+  // Player movement
+  let speed=3;
+  let playerLeft = parseInt(player.style.left || "220");
+  if(keys["ArrowLeft"] && playerLeft > 0){
+    player.style.left = (playerLeft - speed) + "px";
+  }
+  if(keys["ArrowRight"] && playerLeft < 460){
+    player.style.left = (playerLeft + speed) + "px";
+  }
+
+  let playerX = parseInt(player.style.left || "220");
+  let playerY = parseInt(player.style.top || "360");
+
+  // Update collectibles
+  for(let i = collectibles.length - 1; i >= 0; i--){
+    let c = collectibles[i];
+    c.y += 3; 
+    c.style.top = c.y + "px";
+    
+    if(c.y > 400){
+      c.remove();
+      collectibles.splice(i, 1);
+      continue;
+    }
+    
+    if(Math.abs(playerX - c.x) < 30 && Math.abs(playerY - c.y) < 30){
+      score += 10;
+      energy += c.energyValue;
+      if(collectSound) collectSound.play().catch(()=>{});
+      if(glucoseSound && energy >= 10) glucoseSound.play().catch(()=>{});
+      c.remove();
+      collectibles.splice(i, 1);
+    }
+  }
+
+  // Update obstacles  
+  for(let i = obstacles.length - 1; i >= 0; i--){
+    let o = obstacles[i];
+    o.y += 2; 
+    o.style.top = o.y + "px";
+    
+    if(o.y > 400){
+      o.remove();
+      obstacles.splice(i, 1);
+      continue;
+    }
+    
+    if(Math.abs(playerX - o.x) < 30 && Math.abs(playerY - o.y) < 30){
+      score -= 5;
+      energy = Math.max(0, energy - 5);
+      o.remove();
+      obstacles.splice(i, 1);
+    }
+  }
+
+  // Update HUD
+  const scoreElement = document.getElementById("score");
+  const energyElement = document.getElementById("energy");
+  if (scoreElement) scoreElement.innerText = score;
+  if (energyElement) energyElement.innerText = energy;
+
+  // Win condition  
+  if(energy >= 100) {
+    endGame();
+  }
+}
+
+// End game
+function endGame() {
+  gameOver = true;
+  player.innerText = "🌲"; // Grown tree
+  setTimeout(() => {
+    alert(`Congratulations! Final Score: ${score}`);
+    resetGame();
+  }, 2000);
+}
+
+// Controls
+document.addEventListener("keydown", (e) => keys[e.key] = true);
+document.addEventListener("keyup", (e) => keys[e.key] = false);
+
+</script>
+</body>
+</html>
