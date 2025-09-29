@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Test Sign Up Button</title>
+<style>
+body {
+  font-family: Arial, sans-serif;
+  padding: 20px;
+  background: linear-gradient(to top, #6ecf68, #bdf7ff);
+}
+.btn {
+  background: linear-gradient(45deg, #4a90e2, #7b68ee, #28a745);
+  color: white;
+  padding: 15px 30px;
+  border: none;
+  border-radius: 8px;
+  font-size: 18px;
+  font-weight: bold;
+  cursor: pointer;
+}
+.modal {
+  display: none;
+  position: fixed;
+  z-index: 1000;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+}
+.modal-content {
+  background: white;
+  margin: 5% auto;
+  padding: 20px;
+  border-radius: 12px;
+  width: 400px;
+  max-width: 90%;
+}
+.form-group {
+  margin-bottom: 15px;
+}
+.form-group label {
+  display: block;
+  margin-bottom: 5px;
+  font-weight: bold;
+}
+.form-group input, .form-group select {
+  width: 100%;
+  padding: 10px;
+  border: 2px solid #ddd;
+  border-radius: 5px;
+  box-sizing: border-box;
+}
+</style>
+</head>
+<body>
+
+<h1>EverLearners Test</h1>
+<button class="btn" onclick="openModal()">Sign Up</button>
+
+<!-- Modal -->
+<div id="signupModal" class="modal">
+  <div class="modal-content">
+    <h3>Join EverLearners</h3>
+    <form id="signupForm">
+      <div class="form-group">
+        <label for="signupName">Full Name:</label>
+        <input type="text" id="signupName" required>
+      </div>
+      <div class="form-group">
+        <label for="signupEmail">Email:</label>
+        <input type="email" id="signupEmail" required>
+      </div>
+      <div class="form-group">
+        <label for="signupPassword">Password:</label>
+        <input type="password" id="signupPassword" required>
+      </div>
+      <div class="form-group">
+        <label for="signupMobile">Mobile Number:</label>
+        <input type="tel" id="signupMobile" pattern="[0-9]{10}" placeholder="1234567890" required>
+      </div>
+      <div class="form-group">
+        <label for="signupClass">Class:</label>
+        <select id="signupClass" required>
+          <option value="">Select your class</option>
+          <option value="6">Class 6</option>
+          <option value="7">Class 7</option>
+          <option value="8">Class 8</option>
+          <option value="9">Class 9</option>
+          <option value="10">Class 10</option>
+          <option value="11">Class 11</option>
+          <option value="12">Class 12</option>
+          <option value="college">College</option>
+        </select>
+      </div>
+      <button type="submit" class="btn">Create Account</button>
+      <button type="button" class="btn" onclick="closeModal()">Cancel</button>
+    </form>
+  </div>
+</div>
+
+<script>
+function openModal() {
+  console.log('Opening modal...');
+  document.getElementById('signupModal').style.display = 'block';
+}
+
+function closeModal() {
+  console.log('Closing modal...');
+  document.getElementById('signupModal').style.display = 'none';
+}
+
+document.getElementById('signupForm').addEventListener('submit', function(e) {
+  e.preventDefault();
+  
+  const name = document.getElementById('signupName').value.trim();
+  const email = document.getElementById('signupEmail').value.trim();
+  const password = document.getElementById('signupPassword').value;
+  const mobile = document.getElementById('signupMobile').value.trim();
+  const className = document.getElementById('signupClass').value;
+  
+  console.log('Form data:', { name, email, mobile, className });
+  
+  if (!name || !email || !password || !mobile || !className) {
+    alert('Please fill in all fields');
+    return;
+  }
+  
+  if (!/^[0-9]{10}$/.test(mobile)) {
+    alert('Please enter a valid 10-digit mobile number');
+    return;
+  }
+  
+  alert(`Success! Welcome ${name}! Account created.`);
+  closeModal();
+  document.getElementById('signupForm').reset();
+});
+
+// Close modal when clicking outside
+window.addEventListener('click', function(event) {
+  const modal = document.getElementById('signupModal');
+  if (event.target === modal) {
+    closeModal();
+  }
+});
+</script>
+
+</body>
+</html>
